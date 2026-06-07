@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
-import { Text, TextInput, Switch, SafeAreaView } from "react-native";
+import { Text, TextInput, Switch } from "react-native";
 import { SpaceContext } from "@/context/SpaceContext";
 import { LightTheme, DarkTheme } from "@/hooks/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Mission() {
   const {

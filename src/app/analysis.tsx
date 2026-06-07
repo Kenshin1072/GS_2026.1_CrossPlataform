@@ -1,393 +1,372 @@
 import { useContext } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { SpaceContext } from "@/context/SpaceContext";
 import { DarkTheme, LightTheme } from "@/hooks/colors";
-import { calculateMissionHealth, generateRecommendation, analyzeSystem } from "@/services/aiPredictions";
+import {
+  calculateMissionHealth,
+  generateRecommendation,
+  analyzeSystem,
+} from "@/services/aiPredictions";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
-
 export default function Analysis() {
-    const {
-        darkMode,
-        missionSettings,
+  const {
+    darkMode,
+    missionSettings,
 
-        temperature,
-        signalStrength,
-        fuelLevel,
+    temperature,
+    signalStrength,
+    fuelLevel,
 
-        alerts,
-    } = useContext(SpaceContext);
+    alerts,
+  } = useContext(SpaceContext);
 
-    const theme = darkMode
-        ? DarkTheme
-        : LightTheme;
+  const theme = darkMode ? DarkTheme : LightTheme;
 
-    // Mission Health Score
-    const healthScore = calculateMissionHealth(
-        temperature,
-        signalStrength,
-        fuelLevel
-    );
+  // Mission Health Score
+  const healthScore = calculateMissionHealth(
+    temperature,
+    signalStrength,
+    fuelLevel,
+  );
 
-    const currentPrediction = analyzeSystem({
-        temperature,
-        signalStrength,
-        fuelLevel,
+  const currentPrediction = analyzeSystem({
+    temperature,
+    signalStrength,
+    fuelLevel,
 
-        maxTemperature:
-            missionSettings.maxTemperature,
+    maxTemperature: missionSettings.maxTemperature,
 
-        minFuelLevel:
-            missionSettings.minFuelLevel,
-    });
+    minFuelLevel: missionSettings.minFuelLevel,
+  });
 
-    // Risk Level
-    const riskLevel =
-        healthScore >= 80
-        ? "LOW"
-        : healthScore >= 50
-        ? "MEDIUM"
-        : "HIGH";
+  // Risk Level
+  const riskLevel =
+    healthScore >= 80 ? "LOW" : healthScore >= 50 ? "MEDIUM" : "HIGH";
 
-    // AI Recommendation
-    const recommendation =
-        generateRecommendation(
-        temperature,
-        signalStrength,
-        fuelLevel
-        );
+  // AI Recommendation
+  const recommendation = generateRecommendation(
+    temperature,
+    signalStrength,
+    fuelLevel,
+  );
 
-    return (
-        <SafeAreaView>
-            <ScrollView
+  return (
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: theme.background,
+      }}
+    >
+      <ScrollView
+        style={{
+          flex: 1,
+          backgroundColor: theme.background,
+        }}
+        contentContainerStyle={{
+          padding: 20,
+        }}
+      >
+        <Text
+          style={[
+            styles.title,
+            {
+              color: theme.text,
+            },
+          ]}
+        >
+          AI Analysis
+        </Text>
+
+        {/* Live AI Prediction */}
+
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.card,
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          <Text style={[styles.cardTitle, { color: theme.text }]}>
+            Live AI Prediction
+          </Text>
+
+          {currentPrediction ? (
+            <>
+              <Text
                 style={{
-                    flex: 1,
-                    backgroundColor:
-                    theme.background,
+                  color:
+                    currentPrediction.risk === "HIGH"
+                      ? theme.danger
+                      : theme.primary,
+
+                  fontWeight: "bold",
                 }}
-                contentContainerStyle={{
-                    padding: 20,
+              >
+                {" "}
+                {currentPrediction.risk} RISK
+              </Text>
+
+              <Text
+                style={{
+                  color: theme.text,
+                  marginTop: 10,
                 }}
+              >
+                {currentPrediction.message}
+              </Text>
+            </>
+          ) : (
+            <Text
+              style={{
+                color: theme.text,
+              }}
             >
-                <Text
-                    style={[
-                    styles.title,
-                    {
-                        color: theme.text,
-                    },
-                    ]}
-                >
-                    AI Analysis
-                </Text>
+              All systems nominal.
+            </Text>
+          )}
+        </View>
 
-                {/* Live AI Prediction */}
-                
-                <View
-                    style={[
-                    styles.card,{
-                        backgroundColor: theme.card,
-                        borderColor: theme.border,
-                    },]}
-                >
-                    <Text style={[styles.cardTitle,{color: theme.text,},]}>
-                    Live AI Prediction
-                    </Text>
+        {/* Mission Info */}
 
-                    {currentPrediction ? (
-                    <>
-                    <Text
-                    style={{
-                        color:
-                            currentPrediction.risk === "HIGH"
-                            ? theme.danger
-                            : theme.primary,
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.card,
 
-                        fontWeight: "bold",
-                    }}
-                    > {currentPrediction.risk} RISK
-                    </Text>
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: theme.text,
+              },
+            ]}
+          >
+            Mission
+          </Text>
 
-                    <Text
-                        style={{
-                            color: theme.text,
-                            marginTop: 10,
-                        }}
-                    >{currentPrediction.message}
-                    </Text>
-                    </>
-                ) : (
-                    <Text
-                        style={{
-                            color: theme.text,
-                        }}
-                    >
-                    All systems nominal.
-                    </Text>
-                )}
-                </View>
+          <Text
+            style={{
+              color: theme.text,
+            }}
+          >
+            {missionSettings.missionName}
+          </Text>
+        </View>
 
-                {/* Mission Info */}
+        {/* Health Score */}
 
-                <View
-                    style={[
-                    styles.card,
-                    {
-                        backgroundColor:
-                        theme.card,
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.card,
 
-                        borderColor:
-                        theme.border,
-                    },
-                    ]}
-                >
-                    <Text
-                    style={[
-                        styles.cardTitle,
-                        {
-                        color: theme.text,
-                        },
-                    ]}
-                    >
-                    Mission
-                    </Text>
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: theme.text,
+              },
+            ]}
+          >
+            Mission Health
+          </Text>
 
-                    <Text
-                    style={{
-                        color: theme.text,
-                    }}
-                    >
-                    {missionSettings.missionName}
-                    </Text>
-                </View>
+          <Text
+            style={{
+              color: theme.primary,
+              fontSize: 36,
+              fontWeight: "bold",
+            }}
+          >
+            {healthScore}%
+          </Text>
+        </View>
 
-                {/* Health Score */}
+        {/* Risk Level */}
 
-                <View
-                    style={[
-                    styles.card,
-                    {
-                        backgroundColor:
-                        theme.card,
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.card,
 
-                        borderColor:
-                        theme.border,
-                    },
-                    ]}
-                >
-                    <Text
-                    style={[
-                        styles.cardTitle,
-                        {
-                        color: theme.text,
-                        },
-                    ]}
-                    >
-                    Mission Health
-                    </Text>
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: theme.text,
+              },
+            ]}
+          >
+            Risk Assessment
+          </Text>
 
-                    <Text
-                    style={{
-                        color: theme.primary,
-                        fontSize: 36,
-                        fontWeight: "bold",
-                    }}
-                    >
-                    {healthScore}%
-                    </Text>
-                </View>
+          <Text
+            style={{
+              color: riskLevel === "HIGH" ? theme.danger : theme.primary,
 
-                {/* Risk Level */}
+              fontSize: 20,
+              fontWeight: "bold",
+            }}
+          >
+            {riskLevel}
+          </Text>
+        </View>
 
-                <View
-                    style={[
-                    styles.card,
-                    {
-                        backgroundColor:
-                        theme.card,
+        {/* Current Telemetry */}
 
-                        borderColor:
-                        theme.border,
-                    },
-                    ]}
-                >
-                    <Text
-                    style={[
-                        styles.cardTitle,
-                        {
-                        color: theme.text,
-                        },
-                    ]}
-                    >
-                    Risk Assessment
-                    </Text>
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.card,
 
-                    <Text
-                    style={{
-                        color:
-                        riskLevel === "HIGH"
-                            ? theme.danger
-                            : theme.primary,
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: theme.text,
+              },
+            ]}
+          >
+            Current Telemetry
+          </Text>
 
-                        fontSize: 20,
-                        fontWeight: "bold",
-                    }}
-                    >
-                    {riskLevel}
-                    </Text>
-                </View>
+          <Text style={{ color: theme.text }}>
+            Temperature: {temperature.toFixed(1)}°C
+          </Text>
 
-                {/* Current Telemetry */}
+          <Text style={{ color: theme.text }}>
+            Signal Strength: {signalStrength.toFixed(0)}%
+          </Text>
 
-                <View
-                    style={[
-                    styles.card,
-                    {
-                        backgroundColor:
-                        theme.card,
+          <Text style={{ color: theme.text }}>
+            Fuel Level: {fuelLevel.toFixed(0)}%
+          </Text>
+        </View>
 
-                        borderColor:
-                        theme.border,
-                    },
-                    ]}
-                >
-                    <Text
-                    style={[
-                        styles.cardTitle,
-                        {
-                        color: theme.text,
-                        },
-                    ]}
-                    >
-                    Current Telemetry
-                    </Text>
+        {/* AI Recommendation */}
 
-                    <Text style={{ color: theme.text }}>
-                    Temperature:{" "}
-                    {temperature.toFixed(1)}°C
-                    </Text>
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.card,
 
-                    <Text style={{ color: theme.text }}>
-                    Signal Strength:{" "}
-                    {signalStrength.toFixed(0)}%
-                    </Text>
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: theme.text,
+              },
+            ]}
+          >
+            AI Recommendation
+          </Text>
 
-                    <Text style={{ color: theme.text }}>
-                    Fuel Level:{" "}
-                    {fuelLevel.toFixed(0)}%
-                    </Text>
-                </View>
+          <Text
+            style={{
+              color: theme.text,
+            }}
+          >
+            {recommendation}
+          </Text>
+        </View>
 
-                {/* AI Recommendation */}
+        {/* Alerts */}
 
-                <View
-                    style={[
-                    styles.card,
-                    {
-                        backgroundColor:
-                        theme.card,
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.card,
 
-                        borderColor:
-                        theme.border,
-                    },
-                    ]}
-                >
-                    <Text
-                    style={[
-                        styles.cardTitle,
-                        {
-                        color: theme.text,
-                        },
-                    ]}
-                    >
-                    AI Recommendation
-                    </Text>
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: theme.text,
+              },
+            ]}
+          >
+            Recent Alerts
+          </Text>
 
-                    <Text
-                    style={{
-                        color: theme.text,
-                    }}
-                    >
-                    {recommendation}
-                    </Text>
-                </View>
-
-                {/* Alerts */}
-
-                <View
-                    style={[
-                    styles.card,
-                    {
-                        backgroundColor:
-                        theme.card,
-
-                        borderColor:
-                        theme.border,
-                    },
-                    ]}
-                >
-                    <Text
-                    style={[
-                        styles.cardTitle,
-                        {
-                        color: theme.text,
-                        },
-                    ]}
-                    >
-                    Recent Alerts
-                    </Text>
-
-                    {alerts.length === 0 ? (
-                    <Text
-                        style={{
-                        color: theme.text,
-                        }}
-                    >
-                        No alerts detected.
-                    </Text>
-                    ) : (
-                    alerts.map((alert, index) => (
-                        <Text
-                        key={index}
-                        style={{
-                            color: theme.text,
-                            marginBottom: 8,
-                        }}
-                        >
-                        ⚠ {alert.message}
-                        </Text>
-                    ))
-                    )}
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    );
+          {alerts.length === 0 ? (
+            <Text
+              style={{
+                color: theme.text,
+              }}
+            >
+              No alerts detected.
+            </Text>
+          ) : (
+            alerts.map((alert, index) => (
+              <Text
+                key={index}
+                style={{
+                  color: theme.text,
+                  marginBottom: 8,
+                }}
+              >
+                ⚠ {alert.message}
+              </Text>
+            ))
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    title: {
-        fontSize: 28,
-        fontWeight: "bold",
-        marginBottom: 20,
-        textAlign: "center",
-    },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
 
-    card: {
-        padding: 20,
-        borderRadius: 20,
-        marginBottom: 15,
-        borderWidth: 1,
-    },
+  card: {
+    padding: 20,
+    borderRadius: 20,
+    marginBottom: 15,
+    borderWidth: 1,
+  },
 
-    cardTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-        marginBottom: 10,
-    },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
 });
