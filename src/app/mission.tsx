@@ -11,6 +11,9 @@ export default function Mission() {
 
     missionSettings,
     setMissionSettings,
+
+    fuelLevel,
+    setFuelLevel,
   } = useContext(SpaceContext);
 
   const theme = darkMode ? DarkTheme : LightTheme;
@@ -201,12 +204,6 @@ export default function Mission() {
       <TextInput
         keyboardType="numeric"
         value={missionSettings.maxFuelLevel.toString()}
-        onChangeText={(text) =>
-          setMissionSettings((prev) => ({
-            ...prev,
-            maxFuelLevel: Number(text) || 0,
-          }))
-        }
         onBlur={validateMaxFuelLevel}
         style={{
           backgroundColor: theme.card,
@@ -214,6 +211,15 @@ export default function Mission() {
           padding: 10,
           borderRadius: 10,
           marginBottom: 20,
+        }}
+        onChangeText={(text) => {
+          const newMaxFuel = Number(text) || 0;
+          setMissionSettings((prev) => ({
+            ...prev,
+            maxFuelLevel: newMaxFuel,
+          }));
+
+          setFuelLevel(newMaxFuel);
         }}
       />
       {maxFuelError && (

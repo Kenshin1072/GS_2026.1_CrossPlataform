@@ -7,8 +7,8 @@ type Props = {
 };
 
 export default function FuelGauge({ fuelLevel, maxFuelLevel }: Props) {
-  const radius = 60;
-  const size = 150;
+  const radius = 50;
+  const size = 130;
 
   const circumference = 2 * Math.PI * radius;
 
@@ -35,7 +35,7 @@ export default function FuelGauge({ fuelLevel, maxFuelLevel }: Props) {
         padding: 16,
         alignItems: "center",
         justifyContent: "center",
-        minHeight: 220,
+        height: 220,
       }}
     >
       <Text

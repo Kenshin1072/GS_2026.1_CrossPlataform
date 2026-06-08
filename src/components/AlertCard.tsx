@@ -20,7 +20,7 @@ export default function AlertCard({
           fontWeight: "bold",
         }}
       >
-        {alert.risk} RISK
+        {alert.risk} RISCO
       </Text>
 
       <Text style={{ color: "white" }}>{alert.message}</Text>

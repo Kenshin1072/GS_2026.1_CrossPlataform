@@ -3,11 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { SpaceContext } from "@/context/SpaceContext";
 import { DarkTheme, LightTheme } from "@/hooks/colors";
-import {
-  calculateMissionHealth,
-  generateRecommendation,
-  analyzeSystem,
-} from "@/services/aiPredictions";
+import { analyzeSystem } from "@/services/aiPredictions";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Analysis() {
@@ -24,12 +20,15 @@ export default function Analysis() {
 
   const theme = darkMode ? DarkTheme : LightTheme;
 
-  // Pontuação de saúde da missão (0-100)
-  const healthScore = calculateMissionHealth(
+  const analysis = analyzeSystem({
     temperature,
     signalStrength,
     fuelLevel,
-  );
+
+    maxTemperature: missionSettings.maxTemperature,
+    minFuelLevel: missionSettings.minFuelLevel,
+    maxFuelLevel: missionSettings.maxFuelLevel,
+  });
 
   const currentPrediction = analyzeSystem({
     temperature,
@@ -44,15 +43,15 @@ export default function Analysis() {
 
   // Nível de risco baseado na pontuação de saúde
   const riskLevel =
-    healthScore >= 80 ? "BAIXO" : healthScore >= 50 ? "MÉDIO" : "ALTO";
+    analysis.healthScore >= 80
+      ? "BAIXO"
+      : analysis.healthScore >= 50
+        ? "MÉDIO"
+        : "ALTO";
 
-  // Recomendações baseadas nos dados atuais
-  const recommendation = generateRecommendation(
-    temperature,
-    signalStrength,
-    fuelLevel,
-  );
-
+  const fuelPercentage = (fuelLevel / missionSettings.maxFuelLevel) * 100;
+  const temperaturePercentage =
+    (temperature / missionSettings.maxTemperature) * 100;
   return (
     <SafeAreaView
       style={{
@@ -108,7 +107,7 @@ export default function Analysis() {
                 }}
               >
                 {" "}
-                {currentPrediction.risk} RISCO
+                {analysis.risk} RISCO
               </Text>
 
               <Text
@@ -117,7 +116,7 @@ export default function Analysis() {
                   marginTop: 10,
                 }}
               >
-                {currentPrediction.message}
+                {analysis.message}
               </Text>
             </>
           ) : (
@@ -193,42 +192,7 @@ export default function Analysis() {
               fontWeight: "bold",
             }}
           >
-            {healthScore}%
-          </Text>
-        </View>
-
-        {/* Nível de Risco */}
-
-        <View
-          style={[
-            styles.card,
-            {
-              backgroundColor: theme.card,
-
-              borderColor: theme.border,
-            },
-          ]}
-        >
-          <Text
-            style={[
-              styles.cardTitle,
-              {
-                color: theme.text,
-              },
-            ]}
-          >
-            Nível de Risco
-          </Text>
-
-          <Text
-            style={{
-              color: riskLevel === "ALTO" ? theme.danger : theme.primary,
-
-              fontSize: 20,
-              fontWeight: "bold",
-            }}
-          >
-            {riskLevel}
+            {analysis.healthScore}%
           </Text>
         </View>
 
@@ -256,15 +220,20 @@ export default function Analysis() {
           </Text>
 
           <Text style={{ color: theme.text }}>
-            Temperature: {temperature.toFixed(1)}°C
+            Temperatura: {temperaturePercentage.toFixed(1)}°C
           </Text>
 
           <Text style={{ color: theme.text }}>
-            Signal Strength: {signalStrength.toFixed(0)}%
+            Força do Sinal: {signalStrength.toFixed(0)}%
           </Text>
 
           <Text style={{ color: theme.text }}>
-            Fuel Level: {fuelLevel.toFixed(0)}%
+            Nível de Combustível: {fuelLevel.toFixed(0)} /{" "}
+            {missionSettings.maxFuelLevel}
+          </Text>
+
+          <Text style={{ color: theme.text }}>
+            Capacidade de Combustível: {fuelPercentage.toFixed(0)}%
           </Text>
         </View>
 
@@ -296,7 +265,7 @@ export default function Analysis() {
               color: theme.text,
             }}
           >
-            {recommendation}
+            {analysis.recommendation}
           </Text>
         </View>
 

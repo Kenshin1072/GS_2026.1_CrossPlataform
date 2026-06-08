@@ -22,7 +22,6 @@ export default function HomeScreen() {
   } = useContext(SpaceContext);
   const theme = darkMode ? DarkTheme : LightTheme;
   const styles = useMemo(() => createStyles(theme), [theme]);
-  const fuelPercentage = (fuelLevel / missionSettings.maxFuelLevel) * 100;
 
   return (
     <SafeAreaView
@@ -43,7 +42,7 @@ export default function HomeScreen() {
           style={{
             flexDirection: "row",
             gap: 10,
-            marginBottom: 20,
+            marginBottom: 5,
           }}
         >
           <View style={{ flex: 1 }}>

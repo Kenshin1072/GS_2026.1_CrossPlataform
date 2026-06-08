@@ -13,6 +13,13 @@ export interface AlertType {
   message: string;
 }
 
+export interface AnalysisResult {
+  risk: "BAIXO" | "MÉDIO" | "ALTO";
+  message: string;
+  healthScore: number;
+  recommendation: string;
+}
+
 export function analyzeSystem({
   temperature,
   signalStrength,
@@ -20,81 +27,100 @@ export function analyzeSystem({
   maxTemperature,
   minFuelLevel,
   maxFuelLevel,
-}: SystemStatus): AlertType | null {
+}: SystemStatus): AnalysisResult {
   const temperaturePercentage = (temperature / maxTemperature) * 100;
+
   const fuelPercentage = (fuelLevel / maxFuelLevel) * 100;
 
-  if (temperaturePercentage >= 90 && signalStrength < 40) {
+  let healthScore = 100;
+
+  healthScore -= Math.max(0, temperaturePercentage - 70);
+
+  healthScore -= (100 - signalStrength) * 0.5;
+
+  healthScore -= (100 - fuelPercentage) * 0.3;
+
+  healthScore = Math.max(0, Math.round(healthScore));
+
+  // PRIORIDADE MÁXIMA
+
+  if (signalStrength < 40) {
     return {
       risk: "ALTO",
-      message: "Falha na sinalização prevista devido ao superaquecimento",
-    };
-  }
+      healthScore,
 
-  if (fuelPercentage <= 30) {
-    return {
-      risk: "MÉDIO",
-      message:
-        "Nível de combustível baixo, prepare para economia de combustível",
+      message: "Falha na sinalização prevista",
+
+      recommendation:
+        "Reduza imediatamente a carga térmica e estabilize as comunicações.",
     };
   }
 
   if (fuelLevel <= minFuelLevel) {
     return {
       risk: "ALTO",
+      healthScore,
+
       message: "Nível crítico de combustível previsto",
+
+      recommendation:
+        "Ative protocolos emergenciais de economia de combustível.",
     };
   }
 
   if (signalStrength < 30) {
     return {
       risk: "ALTO",
+      healthScore,
+
       message: "Instabilidade severa na comunicação detectada",
+
+      recommendation: "Redirecione antenas e priorize sistemas de comunicação.",
+    };
+  }
+
+  // PRIORIDADE MÉDIA
+
+  if (fuelPercentage <= 30) {
+    return {
+      risk: "MÉDIO",
+      healthScore,
+
+      message: "Nível de combustível baixo detectado",
+
+      recommendation: "Preparar protocolo de economia de combustível.",
     };
   }
 
   if (temperaturePercentage >= 80) {
     return {
-      risk: "BAIXO",
-      message: "Flutuação térmica detectada",
+      risk: "MÉDIO",
+      healthScore,
+
+      message: "Temperatura aproximando-se do limite operacional",
+
+      recommendation: "Ativar sistemas auxiliares de resfriamento.",
     };
   }
 
-  return null;
-}
-
-export function calculateMissionHealth(
-  temperature: number,
-  signalStrength: number,
-  fuelLevel: number,
-) {
-  let score = 100;
-
-  score -= Math.max(0, temperature - 70);
-
-  score -= (100 - signalStrength) * 0.5;
-
-  score -= (100 - fuelLevel) * 0.3;
-
-  return Math.max(0, Math.round(score));
-}
-
-export function generateRecommendation(
-  temperature: number,
-  signalStrength: number,
-  fuelLevel: number,
-) {
-  if (fuelLevel < 30) {
-    return "Prepare o protocolo de economia de combustível.";
+  if (temperature >= maxTemperature) {
+    return {
+      risk: "ALTO",
+      healthScore,
+      message: "Temperatura excedeu o limite operacional",
+      recommendation:
+        "Ativar protocolos de emergência para resfriamento imediato.",
+    };
   }
 
-  if (signalStrength < 40) {
-    return "Monitorar sistemas de comunicação.";
-  }
+  // ESTÁVEL
 
-  if (temperature > 75) {
-    return "Ativar sistemas de resfriamento adicionais.";
-  }
+  return {
+    risk: "BAIXO",
+    healthScore,
 
-  return "Todos os sistemas operando dentro dos parâmetros normais.";
+    message: "Todos os sistemas operando normalmente",
+
+    recommendation: "Continuar monitoramento padrão da missão.",
+  };
 }

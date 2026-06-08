@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect, useRef, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { analyzeSystem, AlertType } from "@/services/aiPredictions";
 
@@ -41,7 +41,7 @@ export function SpaceProvider({ children }: { children: ReactNode }) {
     missionName: "Artemis-X",
     maxTemperature: 80,
     minFuelLevel: 20,
-    maxFuelLevel: 80,
+    maxFuelLevel: 100,
   });
 
   const [temperature, setTemperature] = useState<number>(
@@ -51,7 +51,6 @@ export function SpaceProvider({ children }: { children: ReactNode }) {
   const [fuelLevel, setFuelLevel] = useState<number>(
     missionSettings.maxFuelLevel,
   );
-  const alertedMessagesRef = useRef(new Set<string>());
   const [temperatureHistory, setTemperatureHistory] = useState<number[]>([
     72, 72, 72, 72, 72,
   ]);
@@ -122,15 +121,12 @@ export function SpaceProvider({ children }: { children: ReactNode }) {
       fuelLevel,
 
       maxTemperature: missionSettings.maxTemperature,
-
       minFuelLevel: missionSettings.minFuelLevel,
       maxFuelLevel: missionSettings.maxFuelLevel,
     });
 
-    if (result && !alertedMessagesRef.current.has(result.message)) {
-      alertedMessagesRef.current.add(result.message);
-
-      setAlerts((prev) => [result, ...prev]);
+    if (result) {
+      setAlerts([result]);
     }
   }, [
     temperature,
