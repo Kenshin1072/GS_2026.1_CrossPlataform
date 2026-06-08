@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useContext } from "react";
 import { SpaceContext } from "@/context/SpaceContext";
@@ -12,10 +12,17 @@ import TemperatureChart from "@/components/TemperatureChart";
 import { DarkTheme, LightTheme } from "@/hooks/colors";
 
 export default function HomeScreen() {
-  const { alerts, darkMode, signalStrength, fuelLevel, temperatureHistory } =
-    useContext(SpaceContext);
+  const {
+    alerts,
+    darkMode,
+    signalStrength,
+    fuelLevel,
+    temperatureHistory,
+    missionSettings,
+  } = useContext(SpaceContext);
   const theme = darkMode ? DarkTheme : LightTheme;
   const styles = useMemo(() => createStyles(theme), [theme]);
+  const fuelPercentage = (fuelLevel / missionSettings.maxFuelLevel) * 100;
 
   return (
     <SafeAreaView
@@ -32,10 +39,24 @@ export default function HomeScreen() {
         {alerts.map((alert, index) => (
           <AlertCard key={index} alert={alert} />
         ))}
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            marginBottom: 20,
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <SignalBars signalStrength={signalStrength} />
+          </View>
 
-        <SignalBars signalStrength={signalStrength} />
-
-        <FuelGauge fuelLevel={fuelLevel} />
+          <View style={{ flex: 1 }}>
+            <FuelGauge
+              fuelLevel={fuelLevel}
+              maxFuelLevel={missionSettings.maxFuelLevel}
+            />
+          </View>
+        </View>
 
         <RadarDisplay />
 

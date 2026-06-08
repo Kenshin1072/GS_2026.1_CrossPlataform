@@ -1,71 +1,126 @@
 import { View, Text } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
-export default function FuelGauge({ fuelLevel }: { fuelLevel: number }) {
-  const radius = 80;
+type Props = {
+  fuelLevel: number;
+  maxFuelLevel: number;
+};
+
+export default function FuelGauge({ fuelLevel, maxFuelLevel }: Props) {
+  const radius = 60;
+  const size = 150;
+
   const circumference = 2 * Math.PI * radius;
 
-  const strokeDashoffset = circumference - (fuelLevel / 100) * circumference;
+  const fuelPercentage = Math.max(
+    0,
+    Math.min(100, (fuelLevel / maxFuelLevel) * 100),
+  );
+
+  const strokeDashoffset =
+    circumference - (fuelPercentage / 100) * circumference;
+
   const fuelColor =
-    fuelLevel > 60 ? "#38bdf8" : fuelLevel > 30 ? "#facc15" : "#ef4444";
+    fuelPercentage > 60
+      ? "#38bdf8"
+      : fuelPercentage > 30
+        ? "#facc15"
+        : "#ef4444";
 
   return (
     <View
       style={{
         backgroundColor: "#111827",
-        padding: 100,
         borderRadius: 20,
+        padding: 16,
         alignItems: "center",
-        marginBottom: 20,
+        justifyContent: "center",
+        minHeight: 220,
       }}
     >
       <Text
         style={{
           color: fuelColor,
           fontSize: 18,
-          marginBottom: 20,
-          marginTop: -70,
           fontWeight: "bold",
+          marginBottom: 12,
         }}
       >
-        Fuel Level
+        Combustível
       </Text>
 
-      <Svg width="200" height="200">
-        <Circle
-          cx="100"
-          cy="100"
-          r={radius}
-          fill="none"
-          stroke="#1e293b"
-          strokeWidth="15"
-        />
-
-        <Circle
-          cx="100"
-          cy="100"
-          r={radius}
-          fill="none"
-          stroke={fuelColor}
-          strokeWidth="15"
-          strokeDasharray={`${circumference}`}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          rotation="-90"
-          origin="100,100"
-        />
-      </Svg>
-
-      <Text
+      <View
         style={{
-          color: "white",
-          fontSize: 24,
-          marginTop: -120,
-          fontWeight: "bold",
+          width: size,
+          height: size,
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        {fuelLevel.toFixed(0)}%
-      </Text>
+        <Svg
+          width={size}
+          height={size}
+          style={{
+            position: "absolute",
+          }}
+        >
+          <Circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            fill="none"
+            stroke="#1e293b"
+            strokeWidth="12"
+          />
+
+          <Circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            fill="none"
+            stroke={fuelColor}
+            strokeWidth="12"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            rotation="-90"
+            origin={`${size / 2},${size / 2}`}
+          />
+        </Svg>
+
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text
+            style={{
+              color: "white",
+              fontSize: 26,
+              fontWeight: "bold",
+            }}
+          >
+            {fuelPercentage.toFixed(0)}%
+          </Text>
+
+          <Text
+            style={{
+              color: fuelColor,
+              fontSize: 12,
+              fontWeight: "bold",
+              marginTop: 4,
+              textAlign: "center",
+            }}
+          >
+            {fuelPercentage > 60
+              ? "Nível Seguro"
+              : fuelPercentage > 30
+                ? "Atenção"
+                : "Crítico"}
+          </Text>
+        </View>
+      </View>
     </View>
   );
 }

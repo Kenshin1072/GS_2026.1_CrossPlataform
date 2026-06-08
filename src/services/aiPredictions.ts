@@ -5,10 +5,11 @@ export interface SystemStatus {
 
   maxTemperature: number;
   minFuelLevel: number;
+  maxFuelLevel: number;
 }
 
 export interface AlertType {
-  risk: "LOW" | "MEDIUM" | "HIGH";
+  risk: "BAIXO" | "MÉDIO" | "ALTO";
   message: string;
 }
 
@@ -18,32 +19,44 @@ export function analyzeSystem({
   fuelLevel,
   maxTemperature,
   minFuelLevel,
+  maxFuelLevel,
 }: SystemStatus): AlertType | null {
-  if (temperature > maxTemperature && signalStrength < 40) {
+  const temperaturePercentage = (temperature / maxTemperature) * 100;
+  const fuelPercentage = (fuelLevel / maxFuelLevel) * 100;
+
+  if (temperaturePercentage >= 90 && signalStrength < 40) {
     return {
-      risk: "HIGH",
-      message: "Predicted signal failure due to overheating",
+      risk: "ALTO",
+      message: "Falha na sinalização prevista devido ao superaquecimento",
     };
   }
 
-  if (fuelLevel < minFuelLevel) {
+  if (fuelPercentage <= 30) {
     return {
-      risk: "MEDIUM",
-      message: "Critical fuel level predicted",
+      risk: "MÉDIO",
+      message:
+        "Nível de combustível baixo, prepare para economia de combustível",
+    };
+  }
+
+  if (fuelLevel <= minFuelLevel) {
+    return {
+      risk: "ALTO",
+      message: "Nível crítico de combustível previsto",
     };
   }
 
   if (signalStrength < 30) {
     return {
-      risk: "HIGH",
-      message: "Severe communication instability detected",
+      risk: "ALTO",
+      message: "Instabilidade severa na comunicação detectada",
     };
   }
 
-  if (temperature > 75) {
+  if (temperaturePercentage >= 80) {
     return {
-      risk: "LOW",
-      message: "Thermal fluctuation detected",
+      risk: "BAIXO",
+      message: "Flutuação térmica detectada",
     };
   }
 
@@ -72,16 +85,16 @@ export function generateRecommendation(
   fuelLevel: number,
 ) {
   if (fuelLevel < 30) {
-    return "Prepare fuel conservation protocol.";
+    return "Prepare o protocolo de economia de combustível.";
   }
 
   if (signalStrength < 40) {
-    return "Monitor communication systems.";
+    return "Monitorar sistemas de comunicação.";
   }
 
   if (temperature > 75) {
-    return "Activate thermal regulation.";
+    return "Ativar sistemas de resfriamento adicionais.";
   }
 
-  return "All systems operating normally.";
+  return "Todos os sistemas operando dentro dos parâmetros normais.";
 }

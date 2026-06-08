@@ -6,6 +6,7 @@ interface MissionSettings {
   missionName: string;
   maxTemperature: number;
   minFuelLevel: number;
+  maxFuelLevel: number;
 }
 
 interface SpaceContextType {
@@ -34,22 +35,28 @@ interface SpaceContextType {
 export const SpaceContext = createContext({} as SpaceContextType);
 
 export function SpaceProvider({ children }: { children: ReactNode }) {
-  const [temperature, setTemperature] = useState(72);
-  const [signalStrength, setSignalStrength] = useState(100);
-  const [fuelLevel, setFuelLevel] = useState(100);
   const [alerts, setAlerts] = useState<AlertType[]>([]);
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [missionSettings, setMissionSettings] = useState<MissionSettings>({
     missionName: "Artemis-X",
     maxTemperature: 80,
     minFuelLevel: 20,
+    maxFuelLevel: 80,
   });
+
+  const [temperature, setTemperature] = useState<number>(
+    missionSettings.maxTemperature,
+  );
+  const [signalStrength, setSignalStrength] = useState<number>(100);
+  const [fuelLevel, setFuelLevel] = useState<number>(
+    missionSettings.maxFuelLevel,
+  );
   const alertedMessagesRef = useRef(new Set<string>());
   const [temperatureHistory, setTemperatureHistory] = useState<number[]>([
     72, 72, 72, 72, 72,
   ]);
 
-  // Load saved data
+  // Carrega as configurações salvas do AsyncStorage ao iniciar o app
   useEffect(() => {
     async function loadStorage() {
       try {
@@ -77,22 +84,22 @@ export function SpaceProvider({ children }: { children: ReactNode }) {
     loadStorage();
   }, []);
 
-  // Save darkMode
+  // Salva as configurações de modo escuro
   useEffect(() => {
     AsyncStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
-  // Save alerts
+  // Salva os alertas gerados
   useEffect(() => {
     AsyncStorage.setItem("alerts", JSON.stringify(alerts));
   }, [alerts]);
 
-  // Save mission settings
+  // Salva as configurações da missão
   useEffect(() => {
     AsyncStorage.setItem("missionSettings", JSON.stringify(missionSettings));
   }, [missionSettings]);
 
-  // Simulated real-time data
+  // Simulação de dados em tempo real
   useEffect(() => {
     const interval = setInterval(() => {
       setTemperature((prev) => {
@@ -100,14 +107,14 @@ export function SpaceProvider({ children }: { children: ReactNode }) {
         setTemperatureHistory((history) => [...history.slice(-4), newTemp]);
         return newTemp;
       });
-      setFuelLevel((prev) => Math.max(0, prev - Math.random() * 0.5));
+      setFuelLevel((prev) => Math.max(0, prev - Math.random() * 1));
       setSignalStrength((prev) => Math.max(0, prev - Math.random() * 0.5));
     }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
-  // AI Prediction System
+  // Sistema de predição e alertas em tempo real
   useEffect(() => {
     const result = analyzeSystem({
       temperature,
@@ -117,6 +124,7 @@ export function SpaceProvider({ children }: { children: ReactNode }) {
       maxTemperature: missionSettings.maxTemperature,
 
       minFuelLevel: missionSettings.minFuelLevel,
+      maxFuelLevel: missionSettings.maxFuelLevel,
     });
 
     if (result && !alertedMessagesRef.current.has(result.message)) {
@@ -130,6 +138,7 @@ export function SpaceProvider({ children }: { children: ReactNode }) {
     fuelLevel,
     missionSettings.maxTemperature,
     missionSettings.minFuelLevel,
+    missionSettings.maxFuelLevel,
   ]);
 
   return (

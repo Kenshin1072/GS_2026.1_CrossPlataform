@@ -21,7 +21,7 @@ export default function TemperatureChart({ data }: { data: number[] }) {
           fontWeight: "bold",
         }}
       >
-        Temperature
+        Temperatura
       </Text>
 
       <LineChart
