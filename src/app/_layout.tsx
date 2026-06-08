@@ -13,6 +13,7 @@ function TabsContent() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: theme.primary,
+        tabBarInactiveTintColor: theme.inactive,
         tabBarStyle: {
           backgroundColor: theme.card,
           borderTopColor: theme.border,
