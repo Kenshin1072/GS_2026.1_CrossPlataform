@@ -23,7 +23,7 @@ function TabsContent() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Dashboard",
+          title: "Painéis",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="planet" size={size} color={color} />
           ),
@@ -33,7 +33,7 @@ function TabsContent() {
       <Tabs.Screen
         name="mission"
         options={{
-          title: "Mission",
+          title: "Missão",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="rocket" size={size} color={color} />
           ),
@@ -43,7 +43,7 @@ function TabsContent() {
       <Tabs.Screen
         name="analysis"
         options={{
-          title: "Analysis",
+          title: "Análise",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="analytics" size={size} color={color} />
           ),

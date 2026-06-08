@@ -24,7 +24,7 @@ export default function Analysis() {
 
   const theme = darkMode ? DarkTheme : LightTheme;
 
-  // Mission Health Score
+  // Pontuação de saúde da missão (0-100)
   const healthScore = calculateMissionHealth(
     temperature,
     signalStrength,
@@ -39,13 +39,14 @@ export default function Analysis() {
     maxTemperature: missionSettings.maxTemperature,
 
     minFuelLevel: missionSettings.minFuelLevel,
+    maxFuelLevel: missionSettings.maxFuelLevel,
   });
 
-  // Risk Level
+  // Nível de risco baseado na pontuação de saúde
   const riskLevel =
     healthScore >= 80 ? "LOW" : healthScore >= 50 ? "MEDIUM" : "HIGH";
 
-  // AI Recommendation
+  // Recomendações baseadas nos dados atuais
   const recommendation = generateRecommendation(
     temperature,
     signalStrength,
@@ -79,7 +80,7 @@ export default function Analysis() {
           AI Analysis
         </Text>
 
-        {/* Live AI Prediction */}
+        {/* Previsão da IA em tempo real */}
 
         <View
           style={[
@@ -91,7 +92,7 @@ export default function Analysis() {
           ]}
         >
           <Text style={[styles.cardTitle, { color: theme.text }]}>
-            Live AI Prediction
+            Previsão da IA em tempo real
           </Text>
 
           {currentPrediction ? (
@@ -99,7 +100,7 @@ export default function Analysis() {
               <Text
                 style={{
                   color:
-                    currentPrediction.risk === "HIGH"
+                    currentPrediction.risk === "ALTO"
                       ? theme.danger
                       : theme.primary,
 
@@ -125,12 +126,12 @@ export default function Analysis() {
                 color: theme.text,
               }}
             >
-              All systems nominal.
+              Totalmente estável. Nenhuma anomalia detectada.
             </Text>
           )}
         </View>
 
-        {/* Mission Info */}
+        {/* Informações da Missão */}
 
         <View
           style={[
@@ -150,7 +151,7 @@ export default function Analysis() {
               },
             ]}
           >
-            Mission
+            Informações da Missão
           </Text>
 
           <Text
@@ -162,7 +163,7 @@ export default function Analysis() {
           </Text>
         </View>
 
-        {/* Health Score */}
+        {/* Pontuação de Saúde */}
 
         <View
           style={[
@@ -182,7 +183,7 @@ export default function Analysis() {
               },
             ]}
           >
-            Mission Health
+            Pontuação de Saúde
           </Text>
 
           <Text
@@ -196,7 +197,7 @@ export default function Analysis() {
           </Text>
         </View>
 
-        {/* Risk Level */}
+        {/* Nível de Risco */}
 
         <View
           style={[
@@ -216,7 +217,7 @@ export default function Analysis() {
               },
             ]}
           >
-            Risk Assessment
+            Nível de Risco
           </Text>
 
           <Text
@@ -231,7 +232,7 @@ export default function Analysis() {
           </Text>
         </View>
 
-        {/* Current Telemetry */}
+        {/* Telemetria Atual */}
 
         <View
           style={[
@@ -251,7 +252,7 @@ export default function Analysis() {
               },
             ]}
           >
-            Current Telemetry
+            Telemetria Atual
           </Text>
 
           <Text style={{ color: theme.text }}>
@@ -267,7 +268,7 @@ export default function Analysis() {
           </Text>
         </View>
 
-        {/* AI Recommendation */}
+        {/* Recomendações da IA */}
 
         <View
           style={[
@@ -287,7 +288,7 @@ export default function Analysis() {
               },
             ]}
           >
-            AI Recommendation
+            Recomendações da IA
           </Text>
 
           <Text
@@ -299,7 +300,7 @@ export default function Analysis() {
           </Text>
         </View>
 
-        {/* Alerts */}
+        {/* Alertas */}
 
         <View
           style={[
@@ -319,7 +320,7 @@ export default function Analysis() {
               },
             ]}
           >
-            Recent Alerts
+            Alertas Recentes
           </Text>
 
           {alerts.length === 0 ? (
@@ -328,7 +329,8 @@ export default function Analysis() {
                 color: theme.text,
               }}
             >
-              No alerts detected.
+              Sem alertas recentes. Todos os sistemas estão operando
+              normalmente.
             </Text>
           ) : (
             alerts.map((alert, index) => (
