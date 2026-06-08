@@ -77,8 +77,8 @@ A tela de Análise reúne os dados de telemetria e aplica diagnósticos preditiv
 ### ❗Diferenciais
 
 <div align="center">
-   <img src="./assets/images/differential1.png" width="250px" alt="Differential One">
-   <img src="./assets/images/Differential2.png" width="250px" alt="Differential Two">
+   <img src="./assets/images/diferrential1.png" width="250px" alt="Differential One">
+   <img src="./assets/images/diffential2.png" width="250px" alt="Differential Two">
 </div>
 Os principais diferenciais implementados na aplicação incluem:
 
