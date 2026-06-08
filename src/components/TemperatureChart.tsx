@@ -1,11 +1,18 @@
 import { Dimensions, View, Text } from "react-native";
 import { LineChart } from "react-native-chart-kit";
+import { useContext } from "react";
+import { SpaceContext } from "@/context/SpaceContext";
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function TemperatureChart({ data }: { data: number[] }) {
-  const warningLine = data.map(() => 75);
-  const criticalLine = data.map(() => 85);
+  const { missionSettings } = useContext(SpaceContext);
+
+  const criticalTemperature = missionSettings.maxTemperature * 0.8;
+  const warningTemperature = missionSettings.maxTemperature;
+
+  const warningLine = data.map(() => warningTemperature);
+  const criticalLine = data.map(() => criticalTemperature);
 
   const currentTemperature = data[data.length - 1];
 
@@ -122,7 +129,7 @@ export default function TemperatureChart({ data }: { data: number[] }) {
             fontWeight: "bold",
           }}
         >
-          ● Atenção (75°C)
+          ● Atenção ({criticalTemperature.toFixed(0)} °C)
         </Text>
 
         <Text
@@ -131,7 +138,7 @@ export default function TemperatureChart({ data }: { data: number[] }) {
             fontWeight: "bold",
           }}
         >
-          ● Crítico (85°C)
+          ● Crítico ({warningTemperature.toFixed(0)} °C)
         </Text>
       </View>
     </View>

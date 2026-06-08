@@ -106,8 +106,8 @@ export function SpaceProvider({ children }: { children: ReactNode }) {
         setTemperatureHistory((history) => [...history.slice(-4), newTemp]);
         return newTemp;
       });
-      setFuelLevel((prev) => Math.max(0, prev - Math.random() * 1));
-      setSignalStrength((prev) => Math.max(0, prev - Math.random() * 0.5));
+      setFuelLevel((prev) => Math.max(0, prev - Math.random() * 3));
+      setSignalStrength((prev) => Math.max(0, prev - Math.random() * 3));
     }, 5000);
 
     return () => clearInterval(interval);
