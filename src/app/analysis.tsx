@@ -44,7 +44,7 @@ export default function Analysis() {
 
   // Nível de risco baseado na pontuação de saúde
   const riskLevel =
-    healthScore >= 80 ? "LOW" : healthScore >= 50 ? "MEDIUM" : "HIGH";
+    healthScore >= 80 ? "BAIXO" : healthScore >= 50 ? "MÉDIO" : "ALTO";
 
   // Recomendações baseadas nos dados atuais
   const recommendation = generateRecommendation(
@@ -108,7 +108,7 @@ export default function Analysis() {
                 }}
               >
                 {" "}
-                {currentPrediction.risk} RISK
+                {currentPrediction.risk} RISCO
               </Text>
 
               <Text
@@ -222,7 +222,7 @@ export default function Analysis() {
 
           <Text
             style={{
-              color: riskLevel === "HIGH" ? theme.danger : theme.primary,
+              color: riskLevel === "ALTO" ? theme.danger : theme.primary,
 
               fontSize: 20,
               fontWeight: "bold",
