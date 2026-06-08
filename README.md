@@ -6,96 +6,102 @@
    <img src="./assets/images/banner.png" width="500px">
 </div>
 
-# Description
+# Descrição
 
-OrbitalMind is a space mission monitoring application designed to provide real-time telemetry analysis and predictive system diagnostics. The app tracks critical spacecraft parameters such as temperature, fuel levels, and signal strenght, helping operators identify potential risks before they become critical failures. The app contains a thematic DarkMode and through intelligent alerts and missions health analysis, OrbitalMindo improves situational awareness and supports safer, more efficient missions.
+O OrbitalMind é uma aplicação de monitoramento de missões espaciais desenvolvida para fornecer análise de telemetria em tempo real e diagnósticos preditivos de sistemas. O aplicativo monitora parâmetros críticos da espaçonave, como temperatura, nível de combustível e intensidade do sinal, ajudando operadores a identificar riscos potenciais antes que se tornem falhas críticas.
 
-## 👤 Team
+A aplicação inclui um tema Dark Mode e, por meio de alertas inteligentes e análise da saúde da missão, melhora a consciência situacional e contribui para missões mais seguras e eficientes.
 
-| Name                            | RM       |
+## 👤 Equipe
+
+| Nome                            | RM       |
 | ------------------------------- | -------- |
 | Felipe Souza Carvalho           | RM564779 |
 | Riquelme Santos da Mata         | RM565053 |
 | Rodrigo Kenshin Viana Matayoshi | RM564026 |
 
-## 📸 App Screen
+## 📸 Telas do Aplicativo
 
-### 🏠 Home - Principal Dashboard
+### 🏠 Home - Painel Principal
 
 <div align="center">
    <img src="./assets/images/home_dark.png" width="250px" alt="Home DarkMode">
 </div>
 
-_Overview of mission indicators: signal, fuel levels, radar and temperature.
-OBS: Signal and fuel levels dahsboards change colors if the levels drops below certain point._
+Visão geral dos indicadores da missão, incluindo intensidade do sinal, níveis de combustível, radar e temperatura.
 
-### Dashboard of Signal
+### 📡 Painel de Sinal
 
 <div align="center">
    <img src="./assets/images/signal_dashboard.png" width="350px" alt="Signal">
 </div>
-Indicates the signal level and if drops below certain point it change to another color.
+Exibe a intensidade atual do sinal. O painel muda de cor sempre que o nível do sinal fica abaixo de um limite predefinido.
 
-### Dashboard of Fuel Levels
+### ⛽ Painel de Combustível
 
 <div align="center">
    <img src="./assets/images/fuel_dashboard.png" width="300px" alt="Fuel Gauge">
 </div>
-The circle indicates the fuel guge levels. Each % lost reduces the circle size and it changes colors if below certain point.
+O indicador circular representa o nível de combustível da espaçonave. Conforme o combustível diminui, o indicador reduz proporcionalmente de tamanho e muda de cor quando níveis críticos são atingidos.
 
-### Dashboard of Radar
+### 🛰️ Painel de Radar
 
 <div align="center">
    <img src="./assets/images/radar_dashboard.png" width="300px" alt="Radar">
 </div>
-Provides visual representation of nearby objects, changing the object colors if the signal is too low to indicate that it may not be accurate.
+Fornece uma representação visual dos objetos próximos.
 
-### Dashboard of Temperature
+### 🌡️ Painel de temperatura
 
 <div align="center">
    <img src="./assets/images/temperature_dashboard.png" width="300px" alt="Temperature Chart">
 </div>
-Provides intel about the last 20 seconds of temperature of the spacecraft to help monitorate the fluctuations in a certain space of time.
+Exibe o histórico de temperatura da espaçonave durante os últimos 20 segundos, auxiliando os operadores no monitoramento das variações ao longo do tempo.
 
-### ⚙️ Mission Screen
+### ⚙️ Tela de Missão
 
 <div align="center">
    <img src="./assets/images/mission_dark.png" width="250px" alt="Mission DarkMode">
    <img src="./assets/images/mission_light.png" width="250px" alt="Mission LightMode">
 </div>
-The Mission screen allows users to configure mission parameters and operational thresholds. Operator can customize mission settings, define temperature and fuel safety limits, and adjust applicatioon preferences such as theme selection.
+A tela de Missão permite que os usuários configurem parâmetros da missão e limites operacionais. Os operadores podem personalizar configurações da missão, definir limites de segurança para temperatura e combustível e ajustar preferências da aplicação, como a seleção de tema.
 
-### 📊 Analysis Screen
+### 📊 Tela de Análise
 
 <div align="center">
    <img src="./assets/images/analysis1.png" width="250px" alt="Analysis Upper Part">
    <img src="./assets/images/analysis2.png" width="250px" alt="Analysis Bottom Part">
 </div>
-The Analysis screen aggregates telemetry data and applies predictive diagnostics to evaluate spacecraft health. It generates risks assessments, mission healht scores and reccomendations, allowing operators to quickly identify anomalies and respond to potential system failures.
+A tela de Análise reúne os dados de telemetria e aplica diagnósticos preditivos para avaliar a saúde da espaçonave. Ela gera avaliações de risco, pontuações de saúde da missão e recomendações, permitindo que os operadores identifiquem rapidamente anomalias e respondam a possíveis falhas do sistema.
 
-### ❗Differential
+### ❗Diferenciais
 
 <div align="center">
    <img src="./assets/images/differential1.png" width="250px" alt="Differential One">
    <img src="./assets/images/Differential2.png" width="250px" alt="Differential Two">
 </div>
-The differentials implemented are alerts of high and low risk with the change of color of the dashboards that indicate that there is some sort of problem with the system. Futhermore Dark/LightMode and TypeScript for prediction
+Os principais diferenciais implementados na aplicação incluem:
 
-## 📱 Features
+- Sistema de alertas para riscos baixos e altos.
+- Mudanças dinâmicas de cor nos painéis para indicar problemas no sistema.
+- Suporte aos modos Dark Mode e Light Mode.
+- Análise preditiva implementada com TypeScript.
 
-- [x] Dashboard with real-time data(simulated) of telemetry, temperature, fuel level and radar.
-- [x] System of alerts that indicates low/high risk
-- [x] AsyncStorage system
-- [x] Navegation of 3 screens with Expo Router
-- [x] Context API for global state
-- [x] Mission form
-- [x] DarkMode
-- [x] Visual data validation
-- [x] Prediction and health system
-- [x] TypeScript
-- [x] SafeAreaView
+## 📱 Funcionalidades
 
-## 🛠️ Technologies
+- [x] Painel de telemetria em tempo real (simulado) com monitoramento de temperatura, combustível, intensidade do sinal e radar.
+- [x] Sistema de alertas para situações de baixo e alto risco.
+- [x] Integração com AsyncStorage.
+- [x] Navegação entre três telas utilizando Expo Router.
+- [x] Context API para gerenciamento global de estado.
+- [x] Formulário de configuração da missão.
+- [x] Suporte a Dark Mode.
+- [x] Validação visual de dados.
+- [x] PSistema de previsão e análise da saúde da missão.
+- [x] Implementação de TypeScript.
+- [x] Suporte ao SafeAreaView.
+
+## 🛠️ Tecnologias
 
 - React Native + Expo + React
 - Expo Router
@@ -106,38 +112,38 @@ The differentials implemented are alerts of high and low risk with the change of
 - React Native svg
 - React Native Chart Kit
 
-## ▶️ How to run
+## ▶️ Como Executar
 
-### Requirements
+### Requisitos
 
 - Node.js
 - Expo CLI `npm install -g expo-cli`
-- Expo Go on the cell phone
+- Expo Go instalado em um dispositivo móvel
 
-### Installation
+### Instalação
 
-1. Clone git repository
+1. Clone o repositório
    ```bash
    git clone https://github.com/Kenshin1072/GS_2026.1_CrossPlataform.git
    ```
-2. Access the repository
+2. Acesse a pasta do projeto
    ```bash
    cd orbitalmind
    ```
-3. Install the dependencies
+3. Instale as dependências
    ```bash
    npm install
    ```
-4. Run the project
+4. Inicie a aplicação
    ```bash
    npx expo start
    ```
-   Scan the QR Code with Expo Go to run on cell phone.
+   Escaneie o QR Code utilizando o Expo Go para executar a aplicação em seu dispositivo móvel.
 
-## 📹 Demonstration Video
+## 📹 Vídeo de Demonstração
 
-_For late update: Insert here the video_
+_A ser adicionado em uma atualização futura._
 
-## 📄 License
+## 📄 Licença
 
-This project was made for academics purposes - FIAP 2026.
+Este projeto foi desenvolvido para fins acadêmicos como parte da Global Solution 2026 da FIAP.
