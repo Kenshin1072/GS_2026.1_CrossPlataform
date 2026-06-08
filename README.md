@@ -142,7 +142,7 @@ Os principais diferenciais implementados na aplicação incluem:
 
 ## 📹 Vídeo de Demonstração
 
-_A ser adicionado em uma atualização futura._
+[![Demonstração do OrbitalMind](https://img.youtube.com/vi/w6gRikkBLig/maxresdefault.jpg)](https://youtu.be/w6gRikkBLig)
 
 ## 📄 Licença
 
